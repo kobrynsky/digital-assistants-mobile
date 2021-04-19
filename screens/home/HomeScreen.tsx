@@ -1,19 +1,21 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import React from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native"
-import navigation from "../../navigation";
+import { StyleSheet, TouchableOpacity, View, Text } from "react-native"
 import { RootStackParamList } from "../../types";
-import { Avatar, Text } from '@ui-kitten/components';
+import { Image } from 'react-native-elements';
 
 const HomeScreen = ({
     navigation,
 }: StackScreenProps<RootStackParamList, 'Home'>) => {
     return (
         <View style={styles.container}>
-            <Avatar style={styles.avatar} size='giant' source={require('../../assets/images/mushrooms.png')} />
+            <Image
+                source={require('../../assets/images/mushrooms.png')}
+                style={styles.image}
+            />
             <Text style={styles.title}>Shrooms AI</Text>
-            <Text status='basic' style={styles.subtitle}>Have you ever eaten "wrong" mushrooms?</Text>
-            <Text status='basic' style={styles.subtitle}>It won't happen to you again!</Text>
+            <Text style={styles.subtitle}>Have you ever eaten "wrong" mushrooms?</Text>
+            <Text style={styles.subtitle}>It won't happen to you again!</Text>
 
             <View style={styles.buttonsView}>
 
@@ -34,25 +36,28 @@ const HomeScreen = ({
 };
 
 const styles = StyleSheet.create({
-    avatar: {
+    image: {
         width: 120,
-        height: 120
+        height: 120,
+        margin: 30,
+        resizeMode: 'contain'
     },
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: "#16a085",
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20,
     },
     title: {
         fontFamily: "space-mono",
+        color: "white",
         marginTop: 15,
         marginBottom: 15,
         fontSize: 35,
-        // fontWeight: 'bold',
     },
     subtitle: {
+        color: "white",
         marginTop: 15,
     },
     buttonsView: {
@@ -63,11 +68,15 @@ const styles = StyleSheet.create({
     },
     link: {
         marginTop: 15,
-        paddingVertical: 15,
+        padding: 15,
+        backgroundColor: "#66af8f",
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: "white",
     },
     linkText: {
         fontSize: 19,
-        color: '#2e78b7',
+        color: 'white',
     },
 });
 

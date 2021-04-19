@@ -1,19 +1,149 @@
-import React from "react";
-import { StackScreenProps } from '@react-navigation/stack';
-import { Text } from "../../components/Themed";
-import { RootStackParamList } from "../../types";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import React, { Component } from "react";
+import {
+  AppRegistry,
+  KeyboardAvoidingView,
+  TouchableOpacity,
+  AsyncStorage,
+  Image,
+  TextInput,
+  StyleSheet, // CSS-like styles
+  Text, // Renders text
+  View // Container component
+} from "react-native";
 
-const LoginScreen = ({
-  navigation,
-}: StackScreenProps<RootStackParamList, 'Login'>) => {
-  return (
-    <>
-      <TouchableOpacity style={{ margin: 50 }} onPress={() => navigation.replace('Home')}>
-        <Text>Home page</Text>
-      </TouchableOpacity>
-    </>
-  )
-};
+import { StackNavigator } from "react-navigation";
+//import Spinner from "react-native-loading-spinner-overlay";
 
-export default LoginScreen
+export default class Login extends Component {
+  constructor() {
+    super();
+    this.state = {
+      email: "",
+      password: ""
+    };
+  }
+  static navigationOptions = {
+    headerStyle: {
+      backgroundColor: "#16a085",
+      elevation: null
+    },
+    header: null
+  };
+  async onLoginPress() {
+    const { email, password } = this.state;
+    console.log(email);
+    console.log(password);
+    await AsyncStorage.setItem("email", email);
+    await AsyncStorage.setItem("password", password);
+    this.props.navigation.navigate("Boiler");
+  }
+  render() {
+    return (
+      <View style={styles.container}>
+        <View behavior="padding" style={styles.container}>
+          <View style={styles.logoContainer}>
+            <Image style={styles.logo} source={require("../../assets/images/mushrooms.png")} />
+          </View>
+          <KeyboardAvoidingView style={styles.keyboard}>
+            <View style={styles.window}>
+              <TextInput
+                placeholder="Username"
+                placeholderTextColor="rgba(255,255,255,0.7)"
+                returnKeyType="next"
+                onSubmitEditing={() => this.passwordInput.focus()}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+                value={this.state.email}
+                onChangeText={email => this.setState({ email })}
+              />
+            </View>
+            <View style={styles.window}>
+              <TextInput
+                placeholder="Password"
+                placeholderTextColor="rgba(255,255,255,0.7)"
+                returnKeyType="go"
+                secureTextEntry
+                ref={input => (this.passwordInput = input)}
+                value={this.state.password}
+                onChangeText={password => this.setState({ password })}
+              />
+            </View>
+            <TouchableOpacity
+              style={styles.buttonContainer}
+              onPress={this.onLoginPress.bind(this)}
+            >
+              <Text style={styles.buttonText}>LOGIN</Text>
+            </TouchableOpacity>
+          </KeyboardAvoidingView>
+        </View>
+        <TouchableOpacity style={styles.button}>
+          <Text
+            style={styles.buttonText}
+            onPress={() => this.props.navigation.navigate("Register")}
+            title="Sign up"
+          >
+            Sign up
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button}>
+          <Text
+            style={styles.buttonText}
+            onPress={() => this.props.navigation.navigate("Home")}
+            title="Home Page"
+          >
+            Home Page
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#16a085"
+  },
+  logoContainer: {
+    alignItems: "center",
+    flexGrow: 1,
+    justifyContent: "center",
+  },
+  logo: {
+    width: 120,
+    height: 120,
+    margin: 30,
+    resizeMode: 'contain'
+  },
+  subtext: {
+    color: "#ffffff",
+    marginTop: 10,
+    width: 160,
+    textAlign: "center",
+    opacity: 0.8
+  },
+  keyboard: {
+    margin: 20,
+    padding: 20,
+    alignSelf: "stretch"
+  },
+  buttonContainer: {
+    backgroundColor: "rgba(255,255,255,0.2)",
+    paddingVertical: 15
+  },
+  buttonText: {
+    textAlign: "center",
+    color: "#FFF",
+    fontWeight: "700"
+  },
+  button: {
+    backgroundColor: "#27ae60",
+    paddingVertical: 15
+  },
+  window: {
+    marginBottom: 15
+  }
+});
+
+AppRegistry.registerComponent("Login", () => Login);
