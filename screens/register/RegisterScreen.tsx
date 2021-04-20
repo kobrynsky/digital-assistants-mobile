@@ -1,174 +1,95 @@
-import React, { Component } from "react";
+import React, { useRef, useState } from "react";
 import {
     AppRegistry,
     StyleSheet,
     Text,
     View,
     TextInput,
-    TouchableHighlight,
     Image,
     KeyboardAvoidingView,
-    AsyncStorage,
-    TouchableOpacity
 } from "react-native";
+import StyledButton from "../../components/StyledButton";
 
-import { StackNavigator } from "react-navigation";
+import { globalStyles } from "../../styles/GlobalStyles";
 
-export default class Register extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            email: "",
-            name: "",
-            password: "",
-            password_confirmation: ""
-        };
-    }
+const Register = (props: any) => {
+    const [username, setUsername] = useState("")
+    const [password, setPassword] = useState("")
 
-    static navigationOptions = {
-        headerStyle: {
-            backgroundColor: "#16a085",
-            elevation: null
-        }
-    };
+    const passwordTextInput = useRef(null)
 
-    async onRegisterPress() {
-        const { email, password, name } = this.state;
-        console.log(email);
-        console.log(name);
+    //Ogolnie tutaj miało być overridowanie przycisku wstecz na Androidzie
+    //Ale nie wiem czemu przekierowuje do Login zamiast Home xD
+    // useFocusEffect(
+    //     React.useCallback(() => {
+
+    //         BackHandler.addEventListener('hardwareBackPress', () => props.navigation.replace('Home'));
+
+    //         return () =>
+    //             BackHandler.removeEventListener('hardwareBackPress', () => props.navigation.replace('Home'));
+    //     }, [])
+    // );
+
+    const onRegisterPress = () => {
+        console.log(username);
         console.log(password);
-        await AsyncStorage.setItem("email", email);
-        await AsyncStorage.setItem("name", name);
-        await AsyncStorage.setItem("password", password);
-        this.props.navigation.navigate("Boiler");
     }
 
-    render() {
-        return (
-            <View behavior="padding" style={styles.container}>
-                <View style={styles.logoContainer}>
-                    <Image style={styles.logo} source={require("../../assets/images/mushrooms.png")} />
-                    <Text style={styles.subtext}>Sign Up:</Text>
+    return (
+        <View style={globalStyles.container}>
+            <Image
+                source={require('../../assets/images/mushrooms.png')}
+                style={globalStyles.logo}
+            />
+            <Text style={globalStyles.title}>Register</Text>
+            <KeyboardAvoidingView behavior="position">
+                <TextInput
+                    value={username}
+                    onChangeText={name => setUsername(name)}
+                    style={globalStyles.input}
+                    placeholder="Username"
+                    placeholderTextColor="rgba(255,255,255,0.7)"
+                    returnKeyType="next"
+                    onSubmitEditing={() => passwordTextInput.current.focus()}
+                />
+                <TextInput
+                    ref={passwordTextInput}
+                    value={password}
+                    onChangeText={pass => setPassword(pass)}
+                    style={globalStyles.input}
+                    placeholder="Password"
+                    placeholderTextColor="rgba(255,255,255,0.7)"
+                    returnKeyType="next"
+                    secureTextEntry
+                />
+            </KeyboardAvoidingView>
+            <View style={styles.buttonsView}>
+                <View style={styles.button}>
+                    <StyledButton onPress={() => props.navigation.replace('Home')} text="Home" />
                 </View>
-                <KeyboardAvoidingView>
-                    <TextInput
-                        value={this.state.name}
-                        onChangeText={name => this.setState({ name })}
-                        style={styles.input}
-                        placeholder="Name"
-                        placeholderTextColor="rgba(255,255,255,0.7)"
-                        returnKeyType="next"
-                        onSubmitEditing={() => this.emailInput.focus()}
+
+                <View style={styles.button}>
+                    <StyledButton
+                        onPress={() => onRegisterPress()}
+                        text="Register"
+                        touchStyle={{ backgroundColor: "#6aaaaf" }}
                     />
-                    <TextInput
-                        value={this.state.email}
-                        onChangeText={email => this.setState({ email })}
-                        style={styles.input}
-                        placeholderTextColor="rgba(255,255,255,0.7)"
-                        returnKeyType="next"
-                        ref={input => (this.emailInput = input)}
-                        onSubmitEditing={() => this.passwordCInput.focus()}
-                        keyboardType="email-address"
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        placeholder="Email"
-                    />
-                    <TextInput
-                        value={this.state.password}
-                        onChangeText={password => this.setState({ password })}
-                        style={styles.input}
-                        placeholder="Password"
-                        secureTextEntry={true}
-                        placeholderTextColor="rgba(255,255,255,0.7)"
-                        ref={input => (this.passwordCInput = input)}
-                        onSubmitEditing={() => this.passwordInput.focus()}
-                        returnKeyType="next"
-                        secureTextEntry
-                    />
-                    <TextInput
-                        value={this.state.password}
-                        onChangeText={password_confirmation => this.setState({ password_confirmation })}
-                        style={styles.input}
-                        placeholder="Confirm Password"
-                        secureTextEntry={true}
-                        placeholderTextColor="rgba(255,255,255,0.7)"
-                        returnKeyType="go"
-                        secureTextEntry
-                        ref={input => (this.passwordInput = input)}
-                    />
-                </KeyboardAvoidingView>
-                <TouchableHighlight
-                    onPress={this.onRegisterPress.bind(this)}
-                    style={styles.button}
-                >
-                    <Text style={styles.buttonText}>Register</Text>
-                </TouchableHighlight>
-                <TouchableOpacity style={styles.button}>
-                    <Text
-                        style={styles.buttonText}
-                        onPress={() => this.props.navigation.navigate("Home")}
-                        title="Home Page"
-                    >
-                        Home Page
-          </Text>
-                </TouchableOpacity>
+                </View>
             </View>
-        );
-    }
+        </View>
+    );
 }
 
+
 const styles = StyleSheet.create({
-    container: {
-        flex: 1.2,
-        justifyContent: "flex-start",
-        alignItems: "center",
-        backgroundColor: "#16a085",
-        padding: 20,
-        paddingTop: 100
-    },
-    logoContainer: {
-        alignItems: "center",
-        flexGrow: 1,
-        justifyContent: "center",
-    },
-    logo: {
-        width: 120,
-        height: 120,
-        margin: 30,
-        resizeMode: 'contain'
-    },
-    input: {
-        height: 40,
-        width: 350,
-        marginBottom: 10,
-        backgroundColor: "rgba(255,255,255,0.2)",
-        color: "#fff",
-        paddingHorizontal: 10
+    buttonsView: {
+        flexDirection: 'row'
     },
     button: {
-        height: 50,
-        backgroundColor: "rgba(255,255,255,0.2)",
-        alignSelf: "stretch",
-        marginTop: 10,
-        justifyContent: "center",
-        paddingVertical: 15,
-        marginBottom: 10
+        margin: 15,
     },
-    buttonText: {
-        fontSize: 18,
-        alignSelf: "center",
-        textAlign: "center",
-        color: "#FFF",
-        fontWeight: "700"
-    },
-    subtext: {
-        color: "#ffffff",
-        width: 160,
-        textAlign: "center",
-        fontSize: 35,
-        fontWeight: "bold",
-        marginTop: 20
-    }
 });
+
+export default Register
 
 AppRegistry.registerComponent("Register", () => Register);
