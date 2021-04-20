@@ -1,4 +1,5 @@
-import React, { useRef, useState } from "react";
+import axios from "axios";
+import React, { useEffect, useRef, useState } from "react";
 import {
     AppRegistry,
     StyleSheet,
@@ -7,32 +8,32 @@ import {
     TextInput,
     Image,
     KeyboardAvoidingView,
+    ActivityIndicator,
 } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import StyledButton from "../../components/StyledButton";
+import { register } from "../../state/auth/auth.thunk";
+import { RootState } from "../../state/root.reducer"
+import { StatusType } from "../../state/_utils/statusType";
 
 import { globalStyles } from "../../styles/GlobalStyles";
 
 const Register = (props: any) => {
+    const dispatch = useDispatch()
+
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
 
+    const registerStatus = useSelector((state: RootState) => state.auth.status.register)
+
     const passwordTextInput = useRef(null)
 
-    //Ogolnie tutaj miało być overridowanie przycisku wstecz na Androidzie
-    //Ale nie wiem czemu przekierowuje do Login zamiast Home xD
-    // useFocusEffect(
-    //     React.useCallback(() => {
-
-    //         BackHandler.addEventListener('hardwareBackPress', () => props.navigation.replace('Home'));
-
-    //         return () =>
-    //             BackHandler.removeEventListener('hardwareBackPress', () => props.navigation.replace('Home'));
-    //     }, [])
-    // );
-
     const onRegisterPress = () => {
-        console.log(username);
-        console.log(password);
+        const onSuccess = () => {
+            props.navigation.replace('Login')
+        }
+
+        dispatch(register({ username, password }, onSuccess))
     }
 
     return (
@@ -42,40 +43,46 @@ const Register = (props: any) => {
                 style={globalStyles.logo}
             />
             <Text style={globalStyles.title}>Register</Text>
-            <KeyboardAvoidingView behavior="position">
-                <TextInput
-                    value={username}
-                    onChangeText={name => setUsername(name)}
-                    style={globalStyles.input}
-                    placeholder="Username"
-                    placeholderTextColor="rgba(255,255,255,0.7)"
-                    returnKeyType="next"
-                    onSubmitEditing={() => passwordTextInput.current.focus()}
-                />
-                <TextInput
-                    ref={passwordTextInput}
-                    value={password}
-                    onChangeText={pass => setPassword(pass)}
-                    style={globalStyles.input}
-                    placeholder="Password"
-                    placeholderTextColor="rgba(255,255,255,0.7)"
-                    returnKeyType="next"
-                    secureTextEntry
-                />
-            </KeyboardAvoidingView>
-            <View style={styles.buttonsView}>
-                <View style={styles.button}>
-                    <StyledButton onPress={() => props.navigation.replace('Home')} text="Home" />
-                </View>
+            {registerStatus === StatusType.LOADING ?
+                <ActivityIndicator size="large" color="rgba(0,0,0,0.5)" />
+                :
+                <>
+                    <KeyboardAvoidingView behavior="position">
+                        <TextInput
+                            value={username}
+                            onChangeText={name => setUsername(name)}
+                            style={globalStyles.input}
+                            placeholder="Username"
+                            placeholderTextColor="rgba(255,255,255,0.7)"
+                            returnKeyType="next"
+                            onSubmitEditing={() => passwordTextInput.current.focus()}
+                        />
+                        <TextInput
+                            ref={passwordTextInput}
+                            value={password}
+                            onChangeText={pass => setPassword(pass)}
+                            style={globalStyles.input}
+                            placeholder="Password"
+                            placeholderTextColor="rgba(255,255,255,0.7)"
+                            returnKeyType="next"
+                            secureTextEntry
+                        />
+                    </KeyboardAvoidingView>
+                    <View style={styles.buttonsView}>
+                        <View style={styles.button}>
+                            <StyledButton onPress={() => props.navigation.replace('Home')} text="Home" />
+                        </View>
 
-                <View style={styles.button}>
-                    <StyledButton
-                        onPress={() => onRegisterPress()}
-                        text="Register"
-                        touchStyle={{ backgroundColor: "#6aaaaf" }}
-                    />
-                </View>
-            </View>
+                        <View style={styles.button}>
+                            <StyledButton
+                                onPress={() => onRegisterPress()}
+                                text="Register"
+                                touchStyle={{ backgroundColor: "#6aaaaf" }}
+                            />
+                        </View>
+                    </View>
+                </>
+            }
         </View>
     );
 }
