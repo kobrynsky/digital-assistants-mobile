@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   AppRegistry,
   StyleSheet,
@@ -23,9 +23,17 @@ const Login = (props: any) => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
+  const buttonDisabled = username.length <= 0 && password.length <= 0
+
   const loginStatus = useSelector((state: RootState) => state.auth.status.login)
 
   const passwordTextInput = useRef(null)
+
+  useEffect(() => {
+    if (loginStatus == StatusType.FAILED)
+      alert("Provided username or password is not correct")
+  }, [loginStatus])
+
 
   const onLoginPress = () => {
     const onSuccess = () => {
@@ -75,6 +83,7 @@ const Login = (props: any) => {
             <View style={styles.button}>
               <StyledButton
                 onPress={() => onLoginPress()}
+                disabled={buttonDisabled}
                 text="Login"
                 touchStyle={{ backgroundColor: "#6aaaaf" }}
               />

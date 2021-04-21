@@ -24,9 +24,16 @@ const Register = (props: any) => {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
 
+    const buttonDisabled = username.length <= 0 && password.length <= 0
+
     const registerStatus = useSelector((state: RootState) => state.auth.status.register)
 
     const passwordTextInput = useRef(null)
+
+    useEffect(() => {
+        if (registerStatus == StatusType.FAILED)
+            alert("User with this name already exists")
+    }, [registerStatus])
 
     const onRegisterPress = () => {
         const onSuccess = () => {
@@ -76,6 +83,7 @@ const Register = (props: any) => {
                         <View style={styles.button}>
                             <StyledButton
                                 onPress={() => onRegisterPress()}
+                                disabled={buttonDisabled}
                                 text="Register"
                                 touchStyle={{ backgroundColor: "#6aaaaf" }}
                             />
