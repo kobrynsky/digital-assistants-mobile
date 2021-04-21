@@ -1,8 +1,9 @@
 import axios, { AxiosRequestConfig } from "axios";
 import store from "../state/store";
 import { AuthApi } from "./endpoints/authApi";
+import { ShroomsApi } from "./endpoints/shroomsApi";
 
-export const BASE_URL = 'https://b69bcb836cac.ngrok.io/api/'
+export const BASE_URL = 'https://3993cfdc4fd1.ngrok.io/api/'
 
 axios.defaults.baseURL = BASE_URL;
 
@@ -39,7 +40,7 @@ export const requests = {
 
 const agent = {
     Auth: AuthApi,
+    Shrooms: ShroomsApi
 };
 
 export default agent;
-
