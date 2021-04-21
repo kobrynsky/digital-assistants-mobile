@@ -1,6 +1,6 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import React from "react";
-import { StyleSheet, TouchableOpacity, View, Text } from "react-native"
+import { StyleSheet, View, Text } from "react-native"
 import { RootStackParamList } from "../../types";
 import { Image } from 'react-native-elements';
 import { globalStyles } from '../../styles/GlobalStyles'
