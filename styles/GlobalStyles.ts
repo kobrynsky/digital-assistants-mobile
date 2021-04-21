@@ -30,6 +30,7 @@ export const globalStyles = StyleSheet.create({
         borderColor: "white",
     },
     buttonText: {
+        textAlign: "center",
         fontSize: 19,
         color: 'white',
     },
@@ -45,4 +46,14 @@ export const globalStyles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "white",
     },
+    loading: {
+        backgroundColor: "#16a085",
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
 })

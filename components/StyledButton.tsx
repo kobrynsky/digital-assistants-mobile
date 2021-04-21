@@ -8,12 +8,20 @@ interface StyledButtonProps {
     text: string,
     textStyle?: any,
     touchStyle?: any,
+    disabled?: boolean,
 }
 
-const StyledButton = ({ onPress, text, textStyle, touchStyle }: StyledButtonProps) => {
+const StyledButton = ({ onPress, text, textStyle, touchStyle, disabled }: StyledButtonProps) => {
     return (
-        <TouchableOpacity onPress={() => onPress()} style={[globalStyles.buttonTouch, touchStyle]}>
-            <Text style={[globalStyles.buttonText, textStyle]}>{text}</Text>
+        <TouchableOpacity
+            onPress={() => onPress()}
+            style={[globalStyles.buttonTouch, touchStyle]}
+            disabled={disabled}
+        >
+            <Text
+                style={[globalStyles.buttonText, textStyle]}>
+                {text}
+            </Text>
         </TouchableOpacity>
     )
 }
