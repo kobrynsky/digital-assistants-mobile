@@ -1,16 +1,20 @@
 import React, { useEffect } from 'react';
-import { Image, View, Platform, StyleSheet } from 'react-native';
+import { Image, View, Platform, StyleSheet, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import StyledButton from '../../../components/StyledButton';
 import { useDispatch, useSelector } from 'react-redux';
-import { setImageUrl } from '../../../state/shrooms/shrooms.slice';
+import { clearShroomsState, setImageUrl } from '../../../state/shrooms/shrooms.slice';
 import { RootState } from '../../../state/root.reducer';
+import { StatusType } from '../../../state/_utils/statusType';
 
 export interface MushroomImagePickerProps {
     checkShroom: Function,
+    checkShroomStatus: StatusType,
+    predictedClass: string,
+    percentageProbability: number,
 }
 
-const MushroomImagePicker = ({ checkShroom }: MushroomImagePickerProps) => {
+const MushroomImagePicker = ({ checkShroom, checkShroomStatus, predictedClass, percentageProbability }: MushroomImagePickerProps) => {
     const dispatch = useDispatch()
 
     const imageUrl = useSelector((state: RootState) => state.shrooms.imageUrl)
@@ -34,9 +38,8 @@ const MushroomImagePicker = ({ checkShroom }: MushroomImagePickerProps) => {
             quality: 1,
         });
 
-        console.log(result);
-
         if (!result.cancelled) {
+            dispatch(clearShroomsState())
             dispatch(setImageUrl(result.uri));
         }
     };
@@ -54,7 +57,16 @@ const MushroomImagePicker = ({ checkShroom }: MushroomImagePickerProps) => {
                     {imageUrl && <Image source={{ uri: imageUrl }} style={styles.image} />}
                 </View>
                 <View>
-                    {imageUrl && <StyledButton onPress={() => checkShroom()} text="Check shroom!" touchStyle={styles.button} />}
+                    {imageUrl && !(checkShroomStatus === StatusType.SUCCESS) && <StyledButton onPress={() => checkShroom()} text="Check shroom!" touchStyle={styles.button} />}
+                </View>
+                <View style={styles.view__predictView}>
+                    {checkShroomStatus === StatusType.SUCCESS &&
+                        <>
+                            <Text style={styles.view__predictView__text_hmm}>Hmmm... It is probably</Text>
+                            <Text style={styles.view__predictView__text_predictedClass}>{predictedClass}!</Text>
+                            <Text style={styles.view__predictView__text}>(for like {percentageProbability.toFixed(0)}%)</Text>
+                        </>
+                    }
                 </View>
             </View>
         </View>
@@ -69,7 +81,7 @@ const styles = StyleSheet.create({
         borderColor: "white",
         borderWidth: 2,
         marginTop: 5,
-        marginBottom: 5,
+        marginBottom: 10,
     },
     view__imageView: {
         flex: 1,
@@ -89,7 +101,24 @@ const styles = StyleSheet.create({
     button: {
         marginTop: 5,
         marginBottom: 5,
-    }
+    },
+    view__predictView: {
+        alignItems: 'center',
+    },
+    view__predictView__text: {
+        color: "white",
+        fontSize: 13,
+    },
+    view__predictView__text_hmm: {
+        color: "white",
+        fontSize: 20,
+    },
+    view__predictView__text_predictedClass: {
+        color: "white",
+        fontSize: 30,
+        fontFamily: "space-mono",
+        marginBottom: 10,
+    },
 })
 
 export default MushroomImagePicker;

@@ -14,8 +14,9 @@ import { RootState } from "../../state/root.reducer";
 import { checkShroom } from "../../state/shrooms/shrooms.thunk";
 import { StatusType } from "../../state/_utils/statusType";
 import LoadingScreen from "../../components/LoadingScreen";
+import { clearShroomsState } from "../../state/shrooms/shrooms.slice";
 
-const { LOADING } = StatusType
+const { LOADING, SUCCESS } = StatusType
 
 const HomeLoggedScreen = ({
     navigation,
@@ -24,9 +25,12 @@ const HomeLoggedScreen = ({
 
     const imageUrl = useSelector((state: RootState) => state.shrooms.imageUrl)
     const checkShroomStatus = useSelector((state: RootState) => state.shrooms.status.checkShroom)
+    const predictedClass = useSelector((state: RootState) => state.shrooms.predictedClass)
+    const percentageProbability = useSelector((state: RootState) => state.shrooms.percentageProbability)
 
 
     const onLogoutClick = () => {
+        dispatch(clearShroomsState())
         dispatch(logout())
         navigation.replace('Home')
     }
@@ -55,7 +59,12 @@ const HomeLoggedScreen = ({
                         style={[globalStyles.logo, styles.logo]}
                     />
                     <Text style={[globalStyles.title, styles.title]}>Shrooms AI</Text>
-                    <MushroomImagePicker checkShroom={onCheckShroomClick} />
+                    <MushroomImagePicker
+                        checkShroom={onCheckShroomClick}
+                        checkShroomStatus={checkShroomStatus}
+                        predictedClass={predictedClass}
+                        percentageProbability={percentageProbability}
+                    />
                 </View>
             }
         </>

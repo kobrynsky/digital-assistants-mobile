@@ -5,6 +5,6 @@ import { checkShroomStart, checkShroomSuccess, checkShroomFailure } from "./shro
 export const checkShroom = (imageUrl): AppThunk => async (dispatch) => {
     dispatch(checkShroomStart());
     agent.Shrooms.checkShroom(imageUrl)
-        .then(() => dispatch(checkShroomSuccess()))
+        .then((response) => dispatch(checkShroomSuccess(response)))
         .catch(() => dispatch(checkShroomFailure()))
 };

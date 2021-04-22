@@ -15,12 +15,20 @@ export const shroomsSlice = createSlice({
         checkShroomStart: (state: ShroomsState) => {
             state.status.checkShroom = LOADING;
         },
-        checkShroomSuccess(state: ShroomsState) {
+        checkShroomSuccess(state: ShroomsState, action: PayloadAction<any>) {
+            state.predictedClass = action.payload.data.predicted_class
+            state.percentageProbability = Number(action.payload.data.percentage_probability) * 100
             state.status.checkShroom = SUCCESS;
         },
         checkShroomFailure(state: ShroomsState) {
             state.status.checkShroom = FAILED;
         },
+        clearShroomsState(state: ShroomsState) {
+            state.status = shroomsInitialState.status;
+            state.predictedClass = null;
+            state.percentageProbability = null;
+            state.imageUrl = null;
+        }
     }
 });
 
@@ -32,4 +40,6 @@ export const {
     checkShroomStart,
     checkShroomSuccess,
     checkShroomFailure,
+
+    clearShroomsState,
 } = shroomsSlice.actions;
