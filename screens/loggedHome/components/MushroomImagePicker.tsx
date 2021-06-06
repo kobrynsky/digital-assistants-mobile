@@ -31,11 +31,17 @@ const MushroomImagePicker = ({
   useEffect(() => {
     (async () => {
       if (Platform.OS !== "web") {
-        const {
-          status,
-        } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== "granted") {
-          alert("Sorry, we need camera roll permissions to make this work!");
+        const libraryStatus = await (
+          await ImagePicker.requestMediaLibraryPermissionsAsync()
+        ).status;
+        const cameraStatus = await (
+          await ImagePicker.requestCameraPermissionsAsync()
+        ).status;
+
+        if (libraryStatus !== "granted" || cameraStatus !== "granted") {
+          alert(
+            "Sorry, we need camera roll and camera permissions to make this work!"
+          );
         }
       }
     })();
@@ -43,6 +49,20 @@ const MushroomImagePicker = ({
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      // aspect: [16, 3],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      dispatch(clearShroomsState());
+      dispatch(setImageUrl(result.uri));
+    }
+  };
+
+  const takePhoto = async () => {
+    let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       // aspect: [16, 3],
@@ -142,6 +162,11 @@ const MushroomImagePicker = ({
           <StyledButton
             onPress={() => pickImage()}
             text="Pick image"
+            touchStyle={styles.button}
+          />
+          <StyledButton
+            onPress={() => takePhoto()}
+            text="Take photo"
             touchStyle={styles.button}
           />
         </View>
