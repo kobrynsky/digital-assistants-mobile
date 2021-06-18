@@ -130,26 +130,26 @@ const MushroomImagePicker = ({
     if (checkShroomStatus == StatusType.SUCCESS) {
       switch (predictedClass) {
         case "Agaricus":
-          return `https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Agaricus-campestris-michoacan.jpg/330px-Agaricus-campestris-michoacan.jpg`;
+          return `https://upload.wikimedia.org/wikipedia/commons/3/3a/Agaricus_campestris.jpg`;
         case "Amanita":
-          return `https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Fliegenpilz-1.jpg/330px-Fliegenpilz-1.jpg`;
+          return `https://www.researchgate.net/publication/342712907/figure/fig1/AS:910283224645633@1594039841894/Amanita-muscaria-fly-agaric-Russian-Muhomor-Mukhomor-Reproduced-in_Q640.jpg`;
         case "Boletus":
-          return `https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Boletus_edulis1.jpg/330px-Boletus_edulis1.jpg`;
+          return `https://atlasgrzybow.online/zdjecia/20_800.jpg`;
         case "Cortinarius":
-          return `https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Cortinarius_archeri.jpg/330px-Cortinarius_archeri.jpg`;
+          return `https://www.hlasek.com/foto/cortinarius_ectypus_bm7717.jpg`;
         case "Entoloma":
-          return `https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Entoloma_sinuatum_group.JPG/330px-Entoloma_sinuatum_group.JPG`;
+          return `https://www.hlasek.com/foto/entoloma_cuspidiferum_bk5533.jpg`;
         case "Hygrocybe":
-          return `https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Hygrocybe_coccinea_and_Hygrocybe_virginea_Rosemary_Winnall.JPG/330px-Hygrocybe_coccinea_and_Hygrocybe_virginea_Rosemary_Winnall.JPG`;
+          return `https://www.hlasek.com/foto/hygrocybe_helobia_bk5704.jpg`;
         case "Lactarius":
-          return `https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Lactarius_vietus041031w.jpg/330px-Lactarius_vietus041031w.jpg`;
+          return `https://atlasgrzybow.online/zdjecia/810_800.jpg`;
         case "Russula":
-          return `https://upload.wikimedia.org/wikipedia/commons/thumb/b/b1/Russulamexicana.jpg/330px-Russulamexicana.jpg`;
+          return `https://www.hlasek.com/foto/russula_sphagnophila_ag2388.jpg`;
         case "Suillus":
-          return `https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Suillus_luteus_2.jpg/330px-Suillus_luteus_2.jpg`;
+          return `http://atlasflory.type.pl/gfx/rekord/989-36-suillus_bovinus.jpg`;
 
         default:
-          return "";
+          return "http://atlasflory.type.pl/gfx/rekord/989-36-suillus_bovinus.jpg";
       }
     }
     return "";
@@ -278,8 +278,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: "white",
     borderWidth: 2,
-    marginTop: 5,
-    marginBottom: 10,
+    margin: 5,
     alignSelf: "center",
     resizeMode: "contain",
   },
